@@ -1,10 +1,10 @@
 using System.IO;
 using System.Linq;
-using AutoRegistry.Tests.Utils;
+using EagerRegistry.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
-namespace AutoRegistry.Tests;
+namespace EagerRegistry.Tests;
 
 public class SampleSourceGeneratorTests
 {

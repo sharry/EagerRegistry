@@ -1,7 +1,7 @@
 using System.IO;
 using Microsoft.CodeAnalysis;
 
-namespace AutoRegistry;
+namespace EagerRegistry;
 
 /// <summary>
 /// A sample source generator that creates C# classes based on the text file (in this case, Domain Driven Design ubiquitous language registry).

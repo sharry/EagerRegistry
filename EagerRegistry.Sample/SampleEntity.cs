@@ -1,6 +1,6 @@
 using Generators;
 
-namespace AutoRegistry.Sample;
+namespace EagerRegistry.Sample;
 
 // This code will not compile until you build the project with the Source Generators
 

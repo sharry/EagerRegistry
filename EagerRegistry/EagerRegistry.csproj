@@ -9,8 +9,8 @@
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
 
-        <RootNamespace>AutoRegistry</RootNamespace>
-        <PackageId>AutoRegistry</PackageId>
+        <RootNamespace>EagerRegistry</RootNamespace>
+        <PackageId>EagerRegistry</PackageId>
     </PropertyGroup>
 
     <ItemGroup>

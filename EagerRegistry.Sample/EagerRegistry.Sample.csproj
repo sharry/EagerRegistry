@@ -3,16 +3,15 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <RootNamespace>AutoRegistry.Sample</RootNamespace>
+        <RootNamespace>EagerRegistry.Sample</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AutoRegistry\AutoRegistry.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\EagerRegistry\EagerRegistry.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <ItemGroup>
         <None Remove="DDD.UbiquitousLanguageRegistry.txt"/>
-        <AdditionalFiles Include="DDD.UbiquitousLanguageRegistry.txt"/>
     </ItemGroup>
 
 </Project>

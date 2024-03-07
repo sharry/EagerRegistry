@@ -6,7 +6,7 @@
 
         <IsPackable>false</IsPackable>
 
-        <RootNamespace>AutoRegistry.Tests</RootNamespace>
+        <RootNamespace>EagerRegistry.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AutoRegistry\AutoRegistry.csproj"/>
+        <ProjectReference Include="..\EagerRegistry\EagerRegistry.csproj"/>
     </ItemGroup>
 
 

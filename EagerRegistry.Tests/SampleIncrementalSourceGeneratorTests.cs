@@ -1,9 +1,10 @@
 using System.Linq;
+using EagerRegistry.Tests;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
-namespace AutoRegistry.Tests;
+namespace EagerRegistry.Tests;
 
 public class SampleIncrementalSourceGeneratorTests
 {

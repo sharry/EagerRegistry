@@ -5,8 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-
-namespace AutoRegistry;
+namespace EagerRegistry;
 
 /// <summary>
 /// A sample source generator that creates a custom report based on class properties. The target class should be annotated with the 'Generators.ReportAttribute' attribute.

@@ -3,7 +3,7 @@
   "profiles": {
     "DebugRoslynSourceGenerator": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "../AutoRegistry.Sample/AutoRegistry.Sample.csproj"
+      "targetProject": "../EagerRegistry.Sample/EagerRegistry.Sample.csproj"
     }
   }
 }

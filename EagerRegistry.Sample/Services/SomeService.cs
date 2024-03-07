@@ -1,4 +1,4 @@
-﻿namespace AutoRegistry.Sample.Services;
+﻿namespace EagerRegistry.Sample.Services;
 
 public interface ISomeService
 {
