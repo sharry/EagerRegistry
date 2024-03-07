@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRegistry", "AutoRegistry\AutoRegistry.csproj", "{B49145AF-059E-45F6-AD1B-68EBF4E08961}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRegistry.Sample", "AutoRegistry.Sample\AutoRegistry.Sample.csproj", "{28358927-2311-4548-BD91-854DA981FE41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRegistry.Tests", "AutoRegistry.Tests\AutoRegistry.Tests.csproj", "{7BC7D2D9-4655-4E13-95CE-FCA1C411135C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B49145AF-059E-45F6-AD1B-68EBF4E08961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B49145AF-059E-45F6-AD1B-68EBF4E08961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B49145AF-059E-45F6-AD1B-68EBF4E08961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B49145AF-059E-45F6-AD1B-68EBF4E08961}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28358927-2311-4548-BD91-854DA981FE41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28358927-2311-4548-BD91-854DA981FE41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28358927-2311-4548-BD91-854DA981FE41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28358927-2311-4548-BD91-854DA981FE41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BC7D2D9-4655-4E13-95CE-FCA1C411135C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BC7D2D9-4655-4E13-95CE-FCA1C411135C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BC7D2D9-4655-4E13-95CE-FCA1C411135C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BC7D2D9-4655-4E13-95CE-FCA1C411135C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
