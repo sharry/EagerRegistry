@@ -5,6 +5,7 @@ internal static class Constants
 	public const string DefaultServiceLifetime = "Transient";
 	public const string Namespace = "EagerRegistry";
 	public const string GlobalScope = "global";
+	public const string ServiceCollectionNamespace = "Microsoft.Extensions.DependencyInjection";
 	public const string EnumsNamespace = "EagerRegistry.Enums";
 	public const string Header = $$"""
 	                               //------------------------------------------------------------------------------

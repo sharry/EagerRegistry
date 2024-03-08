@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using EagerRegistry.SourceFactories;
@@ -37,14 +39,22 @@ internal sealed class EagerRegistryGenerator : IIncrementalGenerator
 				PrioritizeAttributeSourceFactory.CreateHintName(),
 				PrioritizeAttributeSourceFactory.CreateSource());
 		});
-		var compilationProvider = context.CompilationProvider;
+		var metadataProvider = context.MetadataReferencesProvider
+			.Select((x, _) => x.GetModules())
+			.Collect()
+			.Select((x, _) => x
+				.SelectMany(y => y)
+				.Distinct());
+		var extrasProvider = context.CompilationProvider
+			.Combine(metadataProvider);
 		var provider = context.SyntaxProvider
 			.CreateSyntaxProvider(Filter, Transform)
 			.Where(x => x.Any())
 			.Collect()
-			.Combine(compilationProvider);
+			.Combine(extrasProvider);
 		context.RegisterSourceOutput(provider, Execute);
 	}
+	
 	private static bool Filter(SyntaxNode node, CancellationToken _)
 	{
 		return node is ClassDeclarationSyntax { Modifiers: var modifiers }
@@ -102,20 +112,30 @@ internal sealed class EagerRegistryGenerator : IIncrementalGenerator
 				lifetime)
 		];
 	}
-	private static void Execute(SourceProductionContext context, (ImmutableArray<EagerRegistryCandidate[]> Candidates, Compilation Compilation) capture)
+	private static void Execute(SourceProductionContext context, (ImmutableArray<EagerRegistryCandidate[]> Candidates, (Compilation Compilation, IEnumerable<ModuleInfo> Modules) Extras) capture)
 	{
-		var assemblyName = capture.Compilation.AssemblyName ?? string.Empty;
-		var assemblyAttributes = capture.Compilation.Assembly.GetAttributes();
+		var assemblyName = capture.Extras.Compilation.AssemblyName ?? string.Empty;
+		var assemblyAttributes = capture.Extras.Compilation.Assembly.GetAttributes();
 		if (assemblyAttributes.Any(x => x.AttributeClass?.Name is "ExcludeFromRegistryAttribute")) return;
 		var assemblyLifetime = assemblyAttributes.GetAssemblyLifetime();
+		var assemblyModulesIncludeDiExtensions = capture.Extras.Modules
+			.Any(x => x.Name is "Microsoft.Extensions.DependencyInjection.dll");
+
 		if (capture.Candidates.IsEmpty) return;
 		var reduced = capture.Candidates
 			.SelectMany(x => x)
 			.Distinct()
 			.Select(c => c with { ServiceLifetime = c.ServiceLifetime ?? assemblyLifetime })
 			.ToImmutableArray();
+
 		context.AddSource(
 			RegistrySourceFactory.CreateHintName(assemblyName),
 			RegistrySourceFactory.CreateSource(assemblyName, reduced));
+
+		if (!assemblyModulesIncludeDiExtensions) return;
+		context.AddSource(
+			ServiceCollectionExtensionSourceFactory.CreateHintName(),
+			ServiceCollectionExtensionSourceFactory.CreateSource(assemblyName));
+
 	}
 }
