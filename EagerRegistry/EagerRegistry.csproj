@@ -18,6 +18,7 @@
         <PackageProjectUrl>https://github.com/sharry/EagerRegistry</PackageProjectUrl>
         <RepositoryUrl>https://github.com/sharry/EagerRegistry</RepositoryUrl>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <Version>1.0.2</Version>
     </PropertyGroup>
 
     <ItemGroup>
