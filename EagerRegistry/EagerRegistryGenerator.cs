@@ -35,9 +35,6 @@ internal sealed class EagerRegistryGenerator : IIncrementalGenerator
 			ctx.AddSource(
 				ServiceLifetimeAttributesSourceFactory.CreateHintName(),
 				ServiceLifetimeAttributesSourceFactory.CreateSource());
-			ctx.AddSource(
-				PrioritizeAttributeSourceFactory.CreateHintName(),
-				PrioritizeAttributeSourceFactory.CreateSource());
 		});
 		var metadataProvider = context.MetadataReferencesProvider
 			.Select((x, _) => x.GetModules())
