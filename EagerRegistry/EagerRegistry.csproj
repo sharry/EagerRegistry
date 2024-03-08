@@ -23,7 +23,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+      <AdditionalFiles Update="AnalyzerReleases.Unshipped.md">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </AdditionalFiles>
     </ItemGroup>
 
 
