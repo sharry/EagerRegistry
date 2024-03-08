@@ -35,6 +35,9 @@ internal sealed class EagerRegistryGenerator : IIncrementalGenerator
 			ctx.AddSource(
 				ServiceLifetimeAttributesSourceFactory.CreateHintName(),
 				ServiceLifetimeAttributesSourceFactory.CreateSource());
+			ctx.AddSource(
+				OverrideAssemblyNameAttributeSourceFactory.CreateHintName(),
+				OverrideAssemblyNameAttributeSourceFactory.CreateSource());
 		});
 		var metadataProvider = context.MetadataReferencesProvider
 			.Select((x, _) => x.GetModules())
@@ -111,7 +114,7 @@ internal sealed class EagerRegistryGenerator : IIncrementalGenerator
 	}
 	private static void Execute(SourceProductionContext context, (ImmutableArray<EagerRegistryCandidate[]> Candidates, (Compilation Compilation, IEnumerable<ModuleInfo> Modules) Extras) capture)
 	{
-		var assemblyName = capture.Extras.Compilation.AssemblyName ?? string.Empty;
+		var assemblyName = GetAssemblyName(capture.Extras.Compilation.Assembly);
 		var assemblyAttributes = capture.Extras.Compilation.Assembly.GetAttributes();
 		if (assemblyAttributes.Any(x => x.AttributeClass?.Name is "ExcludeFromRegistryAttribute")) return;
 		var assemblyLifetime = assemblyAttributes.GetAssemblyLifetime();
@@ -134,5 +137,15 @@ internal sealed class EagerRegistryGenerator : IIncrementalGenerator
 			ServiceCollectionExtensionSourceFactory.CreateHintName(),
 			ServiceCollectionExtensionSourceFactory.CreateSource(assemblyName));
 
+	}
+
+	private static string GetAssemblyName(IAssemblySymbol compilationAssembly)
+	{
+		string? overridenName = compilationAssembly
+			.GetAttributes()
+			.Where(x => x.AttributeClass?.Name is "OverrideAssemblyNameAttribute")
+			.Select(x => x.ConstructorArguments.FirstOrDefault().Value?.ToString())
+			.FirstOrDefault();
+		return overridenName ?? compilationAssembly.Name;
 	}
 }

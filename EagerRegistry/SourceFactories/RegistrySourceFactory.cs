@@ -42,8 +42,8 @@ internal static class RegistrySourceFactory
 	{
 		if (candidate.ImplementationTypeFqn is null)
 		{
-			return $"\t\t\t{Constants.GlobalScope}::EagerRegistry.RegistryEntry.Create<{candidate.ServiceTypeFqn}>({Constants.GlobalScope}::{Constants.EnumsNamespace}.ServiceLifetime.{candidate.ServiceLifetime}),";
+			return $"\t\t\t{Constants.GlobalScope}::EagerRegistry.RegistryEntry.Create<{Constants.GlobalScope}::{candidate.ServiceTypeFqn}>({Constants.GlobalScope}::{Constants.EnumsNamespace}.ServiceLifetime.{candidate.ServiceLifetime}),";
 		}
-		return $"\t\t\t{Constants.GlobalScope}::EagerRegistry.RegistryEntry.Create<{candidate.ServiceTypeFqn}, {candidate.ImplementationTypeFqn}>({Constants.GlobalScope}::{Constants.EnumsNamespace}.ServiceLifetime.{candidate.ServiceLifetime}),";
+		return $"\t\t\t{Constants.GlobalScope}::EagerRegistry.RegistryEntry.Create<{Constants.GlobalScope}::{candidate.ServiceTypeFqn}, {Constants.GlobalScope}::{candidate.ImplementationTypeFqn}>({Constants.GlobalScope}::{Constants.EnumsNamespace}.ServiceLifetime.{candidate.ServiceLifetime}),";
 	}
 }
