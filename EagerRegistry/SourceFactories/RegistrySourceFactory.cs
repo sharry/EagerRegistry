@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using EagerRegistry.Generator;
 
 namespace EagerRegistry.SourceFactories;
 
