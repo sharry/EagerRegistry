@@ -21,7 +21,6 @@ internal static class ServiceLifetimeUtils
 			})
 			.FirstOrDefault();
 	}
-
 	public static string GetAssemblyLifetime(this ImmutableArray<AttributeData> attributes, string defaultLifetime = Constants.DefaultServiceLifetime)
 	{
 		return attributes
@@ -37,5 +36,13 @@ internal static class ServiceLifetimeUtils
 			})
 			.DefaultIfEmpty(defaultLifetime)
 			.FirstOrDefault() ?? defaultLifetime;
+	}
+	public static bool HasExcludeFromRegistryAttribute(this ImmutableArray<AttributeData> attributes)
+	{
+		return attributes.Any(x => x.AttributeClass?.Name is "ExcludeFromRegistryAttribute");
+	}
+	public static bool HasLazyRegistryAttribute(this ImmutableArray<AttributeData> attributes)
+	{
+		return attributes.Any(x => x.AttributeClass?.Name is "LazyRegistryAttribute");
 	}
 }
