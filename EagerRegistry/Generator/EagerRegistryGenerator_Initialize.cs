@@ -17,24 +17,12 @@ internal sealed partial class EagerRegistryGenerator : IIncrementalGenerator
 	{
 		context.RegisterPostInitializationOutput(ctx =>
 		{
-			ctx.AddSource(
-				ExcludeFromRegistryAttributeSourceFactory.CreateHintName(),
-				ExcludeFromRegistryAttributeSourceFactory.CreateSource());
-			ctx.AddSource(
-				RegistryEntrySourceFactory.CreateHintName(),
-				RegistryEntrySourceFactory.CreateSource());
-			ctx.AddSource(
-				ServiceLifetimeSourceFactory.CreateHintName(),
-				ServiceLifetimeSourceFactory.CreateSource());
-			ctx.AddSource(
-				ServiceLifetimeAttributesSourceFactory.CreateHintName(),
-				ServiceLifetimeAttributesSourceFactory.CreateSource());
-			ctx.AddSource(
-				OverrideAssemblyNameAttributeSourceFactory.CreateHintName(),
-				OverrideAssemblyNameAttributeSourceFactory.CreateSource());
-			ctx.AddSource(
-				LazyRegistryAttributeSourceFactory.CreateHintName(),
-				LazyRegistryAttributeSourceFactory.CreateSource());
+			ctx.AddExcludeFromRegistryAttributeSource();
+			ctx.AddRegistryEntrySource();
+			ctx.AddServiceLifetimeSource();
+			ctx.AddServiceLifetimeAttributesSource();
+			ctx.AddOverrideAssemblyNameAttributeSource();
+			ctx.AddLazyRegistryAttributeSource();
 		});
 		var metadataProvider = context.MetadataReferencesProvider
 			.Select((x, _) => x.GetModules())

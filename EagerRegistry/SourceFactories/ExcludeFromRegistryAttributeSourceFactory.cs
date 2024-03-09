@@ -1,9 +1,11 @@
-﻿namespace EagerRegistry.SourceFactories;
+﻿using Microsoft.CodeAnalysis;
+
+namespace EagerRegistry.SourceFactories;
 
 internal static class ExcludeFromRegistryAttributeSourceFactory
 {
-	public static string CreateHintName() => $"{Constants.Namespace}.ExcludeFromRegistryAttribute.g.cs";
-	public static string CreateSource()
+	private static string CreateHintName() => $"{Constants.Namespace}.ExcludeFromRegistryAttribute.g.cs";
+	private static string CreateSource()
 		=> $$"""
 		     {{Constants.Header}}
 		     
@@ -20,4 +22,6 @@ internal static class ExcludeFromRegistryAttributeSourceFactory
 		         }
 		     }
 		     """;
+	public static void AddExcludeFromRegistryAttributeSource(this IncrementalGeneratorPostInitializationContext context)
+		=> context.AddSource(CreateHintName(), CreateSource());
 }

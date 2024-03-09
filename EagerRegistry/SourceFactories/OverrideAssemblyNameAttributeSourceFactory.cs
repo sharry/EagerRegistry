@@ -1,9 +1,11 @@
-﻿namespace EagerRegistry.SourceFactories;
+﻿using Microsoft.CodeAnalysis;
+
+namespace EagerRegistry.SourceFactories;
 
 internal static class OverrideAssemblyNameAttributeSourceFactory
 {
-	public static string CreateHintName() => $"{Constants.Namespace}.OverrideAssemblyNameAttributes.g.cs";
-	public static string CreateSource()
+	private static string CreateHintName() => $"{Constants.Namespace}.OverrideAssemblyNameAttributes.g.cs";
+	private static string CreateSource()
 		=> $$"""
 		     {{Constants.Header}}
 
@@ -20,4 +22,6 @@ internal static class OverrideAssemblyNameAttributeSourceFactory
 		         #pragma warning restore CS9113 // Parameter is unread.
 		     }
 		     """;
+	public static void AddOverrideAssemblyNameAttributeSource(this IncrementalGeneratorPostInitializationContext context)
+		=> context.AddSource(CreateHintName(), CreateSource());
 }

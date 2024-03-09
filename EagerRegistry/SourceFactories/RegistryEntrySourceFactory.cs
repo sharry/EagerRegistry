@@ -1,9 +1,11 @@
-﻿namespace EagerRegistry.SourceFactories;
+﻿using Microsoft.CodeAnalysis;
+
+namespace EagerRegistry.SourceFactories;
 
 internal static class RegistryEntrySourceFactory
 {
-	public static string CreateHintName() => $"{Constants.Namespace}.RegistryEntry.g.cs";
-	public static string CreateSource()
+	private static string CreateHintName() => $"{Constants.Namespace}.RegistryEntry.g.cs";
+	private static string CreateSource()
 		=> $$"""
 		     {{Constants.Header}}
 		     
@@ -33,4 +35,6 @@ internal static class RegistryEntrySourceFactory
 		     	}
 		     }
 		     """;
+	public static void AddRegistryEntrySource(this IncrementalGeneratorPostInitializationContext context)
+		=> context.AddSource(CreateHintName(), CreateSource());
 }

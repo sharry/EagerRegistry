@@ -1,9 +1,11 @@
-﻿namespace EagerRegistry.SourceFactories;
+﻿using Microsoft.CodeAnalysis;
+
+namespace EagerRegistry.SourceFactories;
 
 internal static class ServiceLifetimeAttributesSourceFactory
 {
-	public static string CreateHintName() => $"{Constants.Namespace}.ServiceLifetimeAttributes.g.cs";
-	public static string CreateSource()
+	private static string CreateHintName() => $"{Constants.Namespace}.ServiceLifetimeAttributes.g.cs";
+	private static string CreateSource()
 		=> $$"""
 		     {{Constants.Header}}
 		     
@@ -35,4 +37,6 @@ internal static class ServiceLifetimeAttributesSourceFactory
 		         }
 		     }
 		     """;
+	public static void AddServiceLifetimeAttributesSource(this IncrementalGeneratorPostInitializationContext context)
+		=> context.AddSource(CreateHintName(), CreateSource());
 }

@@ -1,9 +1,11 @@
-﻿namespace EagerRegistry.SourceFactories;
+﻿using Microsoft.CodeAnalysis;
+
+namespace EagerRegistry.SourceFactories;
 
 internal static class LazyRegistryAttributeSourceFactory
 {
-	public static string CreateHintName() => $"{Constants.Namespace}.LazyRegistryAttribute.g.cs";
-	public static string CreateSource()
+	private static string CreateHintName() => $"{Constants.Namespace}.LazyRegistryAttribute.g.cs";
+	private static string CreateSource()
 		=> $$"""
 		     {{Constants.Header}}
 		     
@@ -19,4 +21,6 @@ internal static class LazyRegistryAttributeSourceFactory
 		         }
 		     }
 		     """;
+	public static void AddLazyRegistryAttributeSource(this IncrementalGeneratorPostInitializationContext context)
+		=> context.AddSource(CreateHintName(), CreateSource());
 }
