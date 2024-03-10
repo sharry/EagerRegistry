@@ -17,7 +17,23 @@ internal sealed partial class EagerRegistryGenerator
 			return [];
 		}
 		var attributes = @class.GetAttributes();
-		if (attributes.Any(x => x.AttributeClass?.Name is "ExcludeFromRegistryAttribute"))
+		
+		var serviceAsValue = 0;
+		var excludeAttribute = attributes.FirstOrDefault(x => x.AttributeClass?.Name is "ExcludeFromRegistryAttribute");
+		if (excludeAttribute is not null)
+		{
+			if (!excludeAttribute.ConstructorArguments.IsEmpty)
+			{
+				var arg = excludeAttribute.ConstructorArguments.FirstOrDefault();
+				serviceAsValue = arg.Value is byte value ? value : 7;
+			}
+			else
+			{
+				serviceAsValue = 7;
+			}
+		}
+		
+		if (serviceAsValue is 7)
 		{
 			return [];
 		}
@@ -26,24 +42,28 @@ internal sealed partial class EagerRegistryGenerator
 		var @interface = @class.Interfaces.FirstOrDefault();
 		var interfaceFqn = @interface?.ToDisplayString();
 		var classFqn = @class.ToDisplayString();
+		
 		if (interfaceFqn is null)
 		{
-			return [
-				new RegistryCandidate(
-					classFqn,
-					null,
-					lifetime)
-			];
+			return serviceAsValue switch
+			{
+				1 => [],
+				_ =>
+				[
+					new RegistryCandidate(classFqn, null, lifetime)
+				]
+			};
 		}
-		return [
-			new RegistryCandidate(
-				interfaceFqn, 
-				classFqn, 
-				lifetime),
-			new RegistryCandidate(
-				classFqn,
-				null,
-				lifetime)
-		];
+
+		return serviceAsValue switch
+		{
+			1 => [new RegistryCandidate(interfaceFqn, classFqn, lifetime),],
+			2 => [new RegistryCandidate(classFqn, null, lifetime),],
+			_ =>
+			[
+				new RegistryCandidate(interfaceFqn, classFqn, lifetime),
+				new RegistryCandidate(classFqn, null, lifetime)
+			]
+		};
 	}
 }
