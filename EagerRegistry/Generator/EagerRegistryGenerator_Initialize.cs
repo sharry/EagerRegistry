@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 
 namespace EagerRegistry.Generator;
 
-internal record EagerRegistryCandidate(
+internal record RegistryCandidate(
 	string ServiceTypeFqn,
 	string? ImplementationTypeFqn = null,
 	string? ServiceLifetime = null);
@@ -23,6 +23,7 @@ internal sealed partial class EagerRegistryGenerator : IIncrementalGenerator
 			ctx.AddServiceLifetimeAttributesSource();
 			ctx.AddOverrideAssemblyNameAttributeSource();
 			ctx.AddLazyRegistryAttributeSource();
+			ctx.AddServiceAsSource();
 		});
 		var metadataProvider = context.MetadataReferencesProvider
 			.Select((x, _) => x.GetModules())

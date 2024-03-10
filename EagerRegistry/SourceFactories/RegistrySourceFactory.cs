@@ -6,7 +6,7 @@ namespace EagerRegistry.SourceFactories;
 internal static class RegistrySourceFactory
 {
 	public static string CreateHintName(string assemblyName) => $"{assemblyName}.Registry.g.cs";
-	public static string CreateSource(string assemblyName, ImmutableArray<EagerRegistryCandidate> registryEntries)
+	public static string CreateSource(string assemblyName, ImmutableArray<RegistryCandidate> registryEntries)
 		=> $$"""
 		     {{Constants.Header}}
 		     
@@ -28,7 +28,7 @@ internal static class RegistrySourceFactory
 		     }
 		     """;
 
-	private static string FormatEntries(ImmutableArray<EagerRegistryCandidate> registryEntries)
+	private static string FormatEntries(ImmutableArray<RegistryCandidate> registryEntries)
 	{
 		var result = string.Empty;
 		foreach (var entry in registryEntries)
@@ -39,7 +39,7 @@ internal static class RegistrySourceFactory
 		return result;
 	}
 	
-	private static string FormatEntry(EagerRegistryCandidate entry)
+	private static string FormatEntry(RegistryCandidate entry)
 	{
 		if (entry.ImplementationTypeFqn is null)
 		{

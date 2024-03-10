@@ -7,7 +7,7 @@ internal static class ServiceCollectionExtensionSourceFactory
 {
 	public static string CreateHintName(string assemblyName) => $"{assemblyName}.ServiceCollectionExtension.g.cs";
 
-	public static string CreateSource(string assemblyName, ImmutableArray<EagerRegistryCandidate> entries)
+	public static string CreateSource(string assemblyName, ImmutableArray<RegistryCandidate> entries)
 	{
 		var assemblyNameDotless = assemblyName.Replace(".", "");
 		return $$"""
@@ -15,7 +15,7 @@ internal static class ServiceCollectionExtensionSourceFactory
 		         
 		         #nullable enable
 		         
-		         using {{Constants.GlobalScope}}::{{Constants.ServiceCollectionNamespace}};
+		         using {{Constants.GlobalScope}}::{{Constants.ServiceCollectionNamespace}}.Extensions;
 		         
 		         namespace {{assemblyName}}
 		         {
@@ -30,7 +30,7 @@ internal static class ServiceCollectionExtensionSourceFactory
 		         }
 		         """;
 	}
-	private static string FormatEntries(ImmutableArray<EagerRegistryCandidate> registryEntries)
+	private static string FormatEntries(ImmutableArray<RegistryCandidate> registryEntries)
 	{
 		var result = string.Empty;
 		foreach (var entry in registryEntries)
@@ -41,10 +41,10 @@ internal static class ServiceCollectionExtensionSourceFactory
 		return result;
 	}
 	
-	private static string FormatEntry(EagerRegistryCandidate entry)
+	private static string FormatEntry(RegistryCandidate entry)
 	{
 		return entry.ImplementationTypeFqn is null
-			? $"\t\t\tservices.Add{entry.ServiceLifetime}<{entry.ServiceTypeFqn}>();"
-			: $"\t\t\tservices.Add{entry.ServiceLifetime}<{entry.ServiceTypeFqn}, {entry.ImplementationTypeFqn}>();";
+			? $"\t\t\tservices.TryAdd{entry.ServiceLifetime}<{entry.ServiceTypeFqn}>();"
+			: $"\t\t\tservices.TryAdd{entry.ServiceLifetime}<{entry.ServiceTypeFqn}, {entry.ImplementationTypeFqn}>();";
 	}
 }

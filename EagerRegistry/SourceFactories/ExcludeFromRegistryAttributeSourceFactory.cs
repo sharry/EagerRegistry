@@ -19,6 +19,15 @@ internal static class ExcludeFromRegistryAttributeSourceFactory
 		         [{{Constants.GlobalScope}}::System.AttributeUsage({{Constants.GlobalScope}}::System.AttributeTargets.Class | {{Constants.GlobalScope}}::System.AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
 		         internal sealed class ExcludeFromRegistryAttribute : {{Constants.GlobalScope}}::System.Attribute
 		         {
+		             public global::EagerRegistry.Enums.ServiceAs ServiceAs { get; }
+		             public ExcludeFromRegistryAttribute()
+		             {
+		             	ServiceAs = global::EagerRegistry.Enums.ServiceAs.Any;
+		             }
+		             public ExcludeFromRegistryAttribute(global::EagerRegistry.Enums.ServiceAs serviceAs)
+		             {
+		             	ServiceAs = serviceAs;
+		             }
 		         }
 		     }
 		     """;

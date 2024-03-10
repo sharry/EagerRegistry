@@ -10,7 +10,7 @@ namespace EagerRegistry.Generator;
 internal sealed partial class EagerRegistryGenerator
 {
 	private static void Execute(SourceProductionContext context,
-		(ImmutableArray<EagerRegistryCandidate[]> Candidates,
+		(ImmutableArray<RegistryCandidate[]> Candidates,
 			(Compilation Compilation, IEnumerable<ModuleInfo> Modules) Extras) capture)
 	{
 		var assemblyName = capture.Extras.Compilation.Assembly.GetAssemblyName();
@@ -20,7 +20,7 @@ internal sealed partial class EagerRegistryGenerator
 		
 		if (capture.Candidates.IsEmpty) return;
 
-		ImmutableArray<EagerRegistryCandidate> registryEntries;
+		ImmutableArray<RegistryCandidate> registryEntries;
 		if (assemblyAttributes.HasLazyRegistryAttribute())
 		{
 			registryEntries = capture.Candidates
@@ -28,10 +28,6 @@ internal sealed partial class EagerRegistryGenerator
 				.Distinct()
 				.Where(x => x.ServiceLifetime is not null)
 				.ToImmutableArray();
-			
-			context.AddSource(
-				RegistrySourceFactory.CreateHintName(assemblyName),
-				RegistrySourceFactory.CreateSource(assemblyName, registryEntries));
 		}
 		else // Eager registry
 		{
@@ -42,13 +38,14 @@ internal sealed partial class EagerRegistryGenerator
 				.Select(c => c with { ServiceLifetime = c.ServiceLifetime ?? assemblyLifetime })
 				.ToImmutableArray();
 
-			context.AddSource(
-				RegistrySourceFactory.CreateHintName(assemblyName),
-				RegistrySourceFactory.CreateSource(assemblyName, registryEntries));
 		}
 		
+		context.AddSource(
+			RegistrySourceFactory.CreateHintName(assemblyName),
+			RegistrySourceFactory.CreateSource(assemblyName, registryEntries));
+		
 		var assemblyModulesIncludeDiExtensions = capture.Extras.Modules
-			.Any(x => x.Name is "Microsoft.Extensions.DependencyInjection.dll");
+			.Any(x => x.Name is $"{Constants.ServiceCollectionNamespace}.dll");
 		if (!assemblyModulesIncludeDiExtensions) return;
 		context.AddSource(
 			ServiceCollectionExtensionSourceFactory.CreateHintName(assemblyName),

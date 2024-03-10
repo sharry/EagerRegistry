@@ -8,7 +8,7 @@ namespace EagerRegistry.Generator;
 
 internal sealed partial class EagerRegistryGenerator
 {
-	private static EagerRegistryCandidate[] Transform(GeneratorSyntaxContext context, CancellationToken _)
+	private static RegistryCandidate[] Transform(GeneratorSyntaxContext context, CancellationToken _)
 	{
 		var classDeclaration = (ClassDeclarationSyntax)context.Node;
 		var classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
@@ -29,18 +29,18 @@ internal sealed partial class EagerRegistryGenerator
 		if (interfaceFqn is null)
 		{
 			return [
-				new EagerRegistryCandidate(
+				new RegistryCandidate(
 					classFqn,
 					null,
 					lifetime)
 			];
 		}
 		return [
-			new EagerRegistryCandidate(
+			new RegistryCandidate(
 				interfaceFqn, 
 				classFqn, 
 				lifetime),
-			new EagerRegistryCandidate(
+			new RegistryCandidate(
 				classFqn,
 				null,
 				lifetime)
