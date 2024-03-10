@@ -6,7 +6,7 @@ namespace EagerRegistry.SourceFactories;
 internal static class RegistrySourceFactory
 {
 	public static string CreateHintName(string assemblyName) => $"{assemblyName}.Registry.g.cs";
-	public static string CreateSource(string assemblyName, ImmutableArray<EagerRegistryCandidate> candidates)
+	public static string CreateSource(string assemblyName, ImmutableArray<EagerRegistryCandidate> registryEntries)
 		=> $$"""
 		     {{Constants.Header}}
 		     
@@ -22,29 +22,29 @@ internal static class RegistrySourceFactory
 		         	public static {{Constants.GlobalScope}}::System.Collections.Generic.IReadOnlyCollection<{{Constants.GlobalScope}}::{{Constants.Namespace}}.RegistryEntry> Services => new {{Constants.GlobalScope}}::{{Constants.Namespace}}.RegistryEntry[]
 		         	{
 		         	
-		     {{FormatCandidates(candidates)}}
+		     {{FormatEntries(registryEntries)}}
 		         	};
 		         }
 		     }
 		     """;
 
-	private static string FormatCandidates(ImmutableArray<EagerRegistryCandidate> candidates)
+	private static string FormatEntries(ImmutableArray<EagerRegistryCandidate> registryEntries)
 	{
 		var result = string.Empty;
-		foreach (var candidate in candidates)
+		foreach (var entry in registryEntries)
 		{
-			if (candidate is null) continue;
-			result += $"{FormatCandidate(candidate)}\n";
+			if (entry is null) continue;
+			result += $"{FormatEntry(entry)}\n";
 		}
 		return result;
 	}
 	
-	private static string FormatCandidate(EagerRegistryCandidate candidate)
+	private static string FormatEntry(EagerRegistryCandidate entry)
 	{
-		if (candidate.ImplementationTypeFqn is null)
+		if (entry.ImplementationTypeFqn is null)
 		{
-			return $"\t\t\t{Constants.GlobalScope}::EagerRegistry.RegistryEntry.Create<{Constants.GlobalScope}::{candidate.ServiceTypeFqn}>({Constants.GlobalScope}::{Constants.EnumsNamespace}.ServiceLifetime.{candidate.ServiceLifetime}),";
+			return $"\t\t\t{Constants.GlobalScope}::EagerRegistry.RegistryEntry.Create<{Constants.GlobalScope}::{entry.ServiceTypeFqn}>({Constants.GlobalScope}::{Constants.EnumsNamespace}.ServiceLifetime.{entry.ServiceLifetime}),";
 		}
-		return $"\t\t\t{Constants.GlobalScope}::EagerRegistry.RegistryEntry.Create<{Constants.GlobalScope}::{candidate.ServiceTypeFqn}, {Constants.GlobalScope}::{candidate.ImplementationTypeFqn}>({Constants.GlobalScope}::{Constants.EnumsNamespace}.ServiceLifetime.{candidate.ServiceLifetime}),";
+		return $"\t\t\t{Constants.GlobalScope}::EagerRegistry.RegistryEntry.Create<{Constants.GlobalScope}::{entry.ServiceTypeFqn}, {Constants.GlobalScope}::{entry.ImplementationTypeFqn}>({Constants.GlobalScope}::{Constants.EnumsNamespace}.ServiceLifetime.{entry.ServiceLifetime}),";
 	}
 }

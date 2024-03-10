@@ -1,46 +1,50 @@
-﻿namespace EagerRegistry.SourceFactories;
+﻿using System.Collections.Immutable;
+using EagerRegistry.Generator;
+
+namespace EagerRegistry.SourceFactories;
 
 internal static class ServiceCollectionExtensionSourceFactory
 {
-	public static string CreateHintName() => $"{Constants.Namespace}.ServiceCollectionExtension.g.cs";
-	public static string CreateSource(string assemblyName)
-		=> $$"""
-		     {{Constants.Header}}
-		     
-		     #nullable enable
-		     
-		     using {{Constants.GlobalScope}}::{{Constants.ServiceCollectionNamespace}};
-		     
-		     namespace {{assemblyName}}
-		     {
-		         public static class {{assemblyName.Replace(".", "")}}ServiceCollectionExtensions
+	public static string CreateHintName(string assemblyName) => $"{assemblyName}.ServiceCollectionExtension.g.cs";
+
+	public static string CreateSource(string assemblyName, ImmutableArray<EagerRegistryCandidate> entries)
+	{
+		var assemblyNameDotless = assemblyName.Replace(".", "");
+		return $$"""
+		         {{Constants.Header}}
+		         
+		         #nullable enable
+		         
+		         using {{Constants.GlobalScope}}::{{Constants.ServiceCollectionNamespace}};
+		         
+		         namespace {{assemblyName}}
 		         {
-		             public static {{Constants.GlobalScope}}::{{Constants.ServiceCollectionNamespace}}.IServiceCollection Add{{assemblyName.Replace(".", "")}}Services(this {{Constants.GlobalScope}}::{{Constants.ServiceCollectionNamespace}}.IServiceCollection services)
+		             public static class {{assemblyNameDotless}}ServiceCollectionExtensions
 		             {
-		                 foreach ({{Constants.GlobalScope}}::{{Constants.Namespace}}.RegistryEntry entry in {{Constants.GlobalScope}}::{{assemblyName}}.{{assemblyName.Replace(".", "")}}Registry.Services)
+		                 public static {{Constants.GlobalScope}}::{{Constants.ServiceCollectionNamespace}}.IServiceCollection Add{{assemblyNameDotless}}Services(this {{Constants.GlobalScope}}::{{Constants.ServiceCollectionNamespace}}.IServiceCollection services)
 		                 {
-		                 	if (entry.ImplementationType is null)
-		                 	{
-		                 		return entry.Lifetime switch
-		                 		{
-		                 			{{Constants.GlobalScope}}::{{Constants.EnumsNamespace}}.ServiceLifetime.Singleton => services.AddSingleton(entry.ServiceType),
-		                 			{{Constants.GlobalScope}}::{{Constants.EnumsNamespace}}.ServiceLifetime.Transient => services.AddTransient(entry.ServiceType),
-		                 			{{Constants.GlobalScope}}::{{Constants.EnumsNamespace}}.ServiceLifetime.Scoped => services.AddScoped(entry.ServiceType),
-		                 			_ => throw new {{Constants.GlobalScope}}::System.ArgumentOutOfRangeException()
-		                 		};
-		                 	}
-		                 
-		                 	return entry.Lifetime switch
-		                 	{
-		                 		{{Constants.GlobalScope}}::{{Constants.EnumsNamespace}}.ServiceLifetime.Singleton => services.AddSingleton(entry.ServiceType, entry.ImplementationType),
-		                 		{{Constants.GlobalScope}}::{{Constants.EnumsNamespace}}.ServiceLifetime.Transient => services.AddTransient(entry.ServiceType, entry.ImplementationType),
-		                 		{{Constants.GlobalScope}}::{{Constants.EnumsNamespace}}.ServiceLifetime.Scoped => services.AddScoped(entry.ServiceType, entry.ImplementationType),
-		                 		_ => throw new {{Constants.GlobalScope}}::System.ArgumentOutOfRangeException()
-		                 	};
+		         {{FormatEntries(entries)}}
+		                    return services;
 		                 }
-		                 return services;
 		             }
 		         }
-		     }
-		     """;
+		         """;
+	}
+	private static string FormatEntries(ImmutableArray<EagerRegistryCandidate> registryEntries)
+	{
+		var result = string.Empty;
+		foreach (var entry in registryEntries)
+		{
+			if (entry is null) continue;
+			result += $"{FormatEntry(entry)}\n";
+		}
+		return result;
+	}
+	
+	private static string FormatEntry(EagerRegistryCandidate entry)
+	{
+		return entry.ImplementationTypeFqn is null
+			? $"\t\t\tservices.Add{entry.ServiceLifetime}<{entry.ServiceTypeFqn}>();"
+			: $"\t\t\tservices.Add{entry.ServiceLifetime}<{entry.ServiceTypeFqn}, {entry.ImplementationTypeFqn}>();";
+	}
 }
