@@ -1,1 +1,1 @@
-﻿[assembly: EagerRegistry.Singleton]
+﻿[assembly: EagerRegistry.Scoped]

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EagerRegistry.Sample.Services;
+﻿namespace EagerRegistry.Sample.Services;
 
 public interface ISomeService
 {
