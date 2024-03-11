@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using EagerRegistry.Utils;
 using Microsoft.CodeAnalysis;
@@ -39,31 +41,41 @@ internal sealed partial class EagerRegistryGenerator
 		}
 
 		var lifetime = attributes.GetServiceLifetime();
-		var @interface = @class.Interfaces.FirstOrDefault();
-		var interfaceFqn = @interface?.ToDisplayString();
 		var classFqn = @class.ToDisplayString();
-		
-		if (interfaceFqn is null)
+
+		if (!@class.Interfaces.Any())
 		{
 			return serviceAsValue switch
 			{
 				1 => [],
-				_ =>
-				[
-					new RegistryCandidate(classFqn, null, lifetime)
-				]
+				_ => [new (classFqn, null, lifetime)]
 			};
 		}
 
-		return serviceAsValue switch
+		IEnumerable<RegistryCandidate> candidates = [];
+		foreach (var interfaceFqn in @class.Interfaces.Select(@interface => @interface?.ToDisplayString()))
 		{
-			1 => [new RegistryCandidate(interfaceFqn, classFqn, lifetime),],
-			2 => [new RegistryCandidate(classFqn, null, lifetime),],
-			_ =>
-			[
-				new RegistryCandidate(interfaceFqn, classFqn, lifetime),
-				new RegistryCandidate(classFqn, null, lifetime)
-			]
-		};
+			if (interfaceFqn is null)
+			{
+				candidates = serviceAsValue switch
+				{
+					1 => candidates,
+					_ => candidates.Append(new (classFqn, null, lifetime))
+				};
+			}
+			else
+			{
+				candidates =  serviceAsValue switch
+				{
+					1 => candidates.Append(new (interfaceFqn, classFqn, lifetime)),
+					2 => candidates.Append(new (classFqn, null, lifetime)),
+					_ => candidates
+							.Append(new (classFqn, null, lifetime))
+							.Append(new (interfaceFqn, classFqn, lifetime))
+				};
+			}
+		}
+
+		return candidates.ToArray();
 	}
 }
