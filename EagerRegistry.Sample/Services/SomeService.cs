@@ -12,19 +12,12 @@ public interface ISomeOtherService
 
 public class SomeService : ISomeService, ISomeOtherService
 {
-	public void DoSomething()
-	{
-	}
+	public void DoSomething() {}
 
-	public void DoSomethingElse()
-	{
-		throw new System.NotImplementedException();
-	}
+	public void DoSomethingElse() {}
 }
 
 internal class IndependentService
 {
-	public void DoSomething()
-	{
-	}
+	public void DoSomething() {}
 }
