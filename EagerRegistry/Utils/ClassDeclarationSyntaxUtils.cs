@@ -19,11 +19,14 @@ internal static class ClassDeclarationSyntaxUtils
 	{
 		return !(node.SyntaxTree.FilePath.Contains(".g.") || node.SyntaxTree.FilePath.Contains(".generated."));
 	}
-	public static bool HasPublicMethodsOrProperties(this ClassDeclarationSyntax node)
+	public static bool HasPublicNonStaticMethodsOrProperties(this ClassDeclarationSyntax node)
 	{
 		return node.DescendantNodes().OfType<MethodDeclarationSyntax>()
-			       .Any(x => x.Modifiers.Any(y => y.IsKind(SyntaxKind.PublicKeyword)))
+			       .Any(x => x.Modifiers.Any(y => y.IsKind(SyntaxKind.PublicKeyword))
+			                 && !x.Modifiers.Any(y => y.IsKind(SyntaxKind.StaticKeyword)))
 		       || node.DescendantNodes().OfType<PropertyDeclarationSyntax>()
-			       .Any(x => x.Modifiers.Any(y => y.IsKind(SyntaxKind.PublicKeyword)));
+			       .Any(x => x.Modifiers.Any(y => y.IsKind(SyntaxKind.PublicKeyword))
+			                 && !x.Modifiers.Any(y => y.IsKind(SyntaxKind.StaticKeyword)));
 	}
+
 }

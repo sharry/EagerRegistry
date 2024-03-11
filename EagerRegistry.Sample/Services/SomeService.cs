@@ -26,5 +26,6 @@ public class SomeService : ISomeService, ISomeOtherService, ISomeThirdOtherServi
 
 internal class IndependentService
 {
-	public void DoSomething() {}
+	public static void DoSomething() {}
+	public void DoSomethingElse() {}
 }
