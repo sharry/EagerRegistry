@@ -9,12 +9,19 @@ public interface ISomeOtherService
 {
 	void DoSomethingElse();
 }
+public interface ISomeThirdOtherService
+{
+	void DoSomethingCompletelyDifferent();
+}
 
-public class SomeService : ISomeService, ISomeOtherService
+public class SomeService : ISomeService, ISomeOtherService, ISomeThirdOtherService
 {
 	public void DoSomething() {}
 
 	public void DoSomethingElse() {}
+	public void DoSomethingCompletelyDifferent()
+	{
+	}
 }
 
 internal class IndependentService
